@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace SideProject
+﻿namespace SideProject
 {
     public class Menu
     {
