@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SideProject
+﻿namespace SideProject
 {
-    public class option1
+    public class Option1
     {
        public void Execute()
        {

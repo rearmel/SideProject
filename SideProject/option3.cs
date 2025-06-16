@@ -1,6 +1,6 @@
 ﻿namespace SideProject
 {
-    public class option3
+    public class Option3
     {
         public void Execute()
         {
