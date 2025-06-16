@@ -3,7 +3,8 @@
     public class Menu
     {
         public static void ShowMenu()
-        { 
+        {
+            string option;
 
             do
             {
@@ -12,8 +13,9 @@
                 Console.WriteLine("2 - Opção 2");
                 Console.WriteLine("3 - Opção 3");
                 Console.WriteLine("4 - Sair");
-                var option = Console.ReadLine();
+                option = Console.ReadLine();
                 Console.Clear();
+
                 switch (option)
                 {
                     case "1":
@@ -36,7 +38,7 @@
                         break;
                 }
             } 
-            while (true);
+            while (option != "4");
         }
     }
 }
