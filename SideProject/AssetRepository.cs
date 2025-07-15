@@ -1,22 +1,38 @@
-﻿namespace SideProject
+﻿namespace SideProject;
+
+public class AssetRepository
 {
-    public class AssetRepository
+    private readonly List<Asset> _asset;
+
+    public AssetRepository()
     {
-        private readonly List<Asset> _asset;
+        _asset = new List<Asset>();
+    }
 
-        public AssetRepository()
+    public void AddAsset(Asset asset)
+    {
+        _asset.Add(asset);
+    }
+
+    public List<Asset> GetAssets()
+    {
+        return _asset;
+    }
+
+    public Asset RemoveAssetByCode(string assetCode)
+    {
+        var assetToRemove = _asset.FirstOrDefault(a => a.AssetCode == assetCode);
+        if (assetToRemove != null)
         {
-            _asset = new List<Asset>();
+            _asset.Remove(assetToRemove);
+            return assetToRemove;
         }
-
-        public void AddAsset(Asset asset)
+        else
         {
-            _asset.Add(asset);
-        }
-
-        public List<Asset> GetAssets()
-        {
-            return _asset;
+            Console.WriteLine("Ativo não encontrado na carteira.");
+            throw new Exception("Ativo não encontrado na carteira.");
         }
     }
 }
+
+
