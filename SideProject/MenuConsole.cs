@@ -20,7 +20,8 @@ public class MenuConsole
             Console.WriteLine("1 - Adicionar ativos:");
             Console.WriteLine("2 - Visualizar ativos da carteira:");
             Console.WriteLine("3 - Vender ativos:");
-            Console.WriteLine("4 - Sair");
+            Console.WriteLine("4 - Extrato consolidado:");
+            Console.WriteLine("5 - Sair");
             option = Console.ReadLine();
             Console.Clear();
 
@@ -39,6 +40,10 @@ public class MenuConsole
                     option3.SellAssets();
                     break;
                 case "4":
+                    var option4 = new MenuConsole(assetRepository);
+                    option4.ShowPortfolio();
+                    break;
+                case "5":
                     Console.WriteLine("Encerrando programa..");
                     return;
                 default:
@@ -184,7 +189,30 @@ public class MenuConsole
     {
         var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.AssetCode == assetCode);
         asset.AssetQuantity -= assetQuantity;
+    }
 
+    public void ShowPortfolio() 
+    { 
+        var getAssets = _assetRepository.GetAssets();
+        if (getAssets.Count == 0)
+        {
+            Console.WriteLine("Nenhum ativo encontrado na carteira");
+            return;
+        }
+
+        decimal totalPortfolioValue = 0;
+        Console.WriteLine("Extrato consolidado de ativos investidos:");
+        foreach (var asset in getAssets)
+        {
+            decimal totalAlocated = asset.AssetQuantity * asset.AssetValue;
+            totalPortfolioValue += totalAlocated;
+            Console.WriteLine($"Código do ativo: {asset.AssetCode} | Quantidade: {asset.AssetQuantity} | Valor de cada ativo: {asset.AssetValue} | Total investido: {totalAlocated}");
+        }
+        Console.WriteLine("----------------------------");
+        Console.WriteLine($"Valor total investido na carteira: {totalPortfolioValue}");
+        Console.WriteLine("Pressione qualquer tecla para retornar ao menu...");
+        Console.ReadKey();
+        Console.Clear();
     }
 }
 
