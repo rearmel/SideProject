@@ -129,12 +129,25 @@ public class MenuConsole
         Console.Write("Digite a quantidade de ativos que você deseja vender: ");
         int assetQuantity = int.Parse(Console.ReadLine());
 
+        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.AssetCode == assetCode);
+        if (asset == null)
+        {
+            Console.WriteLine("Ativo não encontrado na carteira.");
+            Thread.Sleep(3000);
+            return;
+        }
+
         if (IsPossibleSellAsset(assetCode, assetQuantity))
         {
             DecreaseAssetQuantity(assetCode, assetQuantity);
-            Console.WriteLine("Venda realizada com sucesso");
+            Console.WriteLine("Venda realizada com sucesso!");
+        }
+        else
+        {
+            Console.WriteLine("Quantidade para venda excede a quantidade disponível!");
         }
 
+        Thread.Sleep(3000);
         Console.Clear();
 
         string response = OptionSellAsset();
@@ -170,18 +183,11 @@ public class MenuConsole
     public bool IsPossibleSellAsset(string assetCode, int assetQuantity)
     {
         var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.AssetCode == assetCode);
-        if (asset == null)
-        {
-            Console.WriteLine("Ativo não encontrado na carteira.");
-            return false;
-        }
 
         if (asset.AssetQuantity < assetQuantity)
         {
-            Console.WriteLine("Quantidade para venda excede a quantidade disponível.");
             return false;
         }
-
         return true;
     }
 
