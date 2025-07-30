@@ -67,7 +67,7 @@ public class MenuConsole
 
         Console.Write("Digite o valor do ativo comprado: ");
         string inputValue = Console.ReadLine();
-        inputValue = inputValue.Replace(",", ".");
+        inputValue = inputValue.Replace(".", ",");
         newAsset.AssetValue = decimal.Parse(inputValue, new CultureInfo("pt-BR"));
 
         newAsset.DateTime = DateTime.Now;
