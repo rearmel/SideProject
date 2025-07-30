@@ -1,4 +1,6 @@
-﻿namespace SideProject;
+﻿using System.Globalization;
+
+namespace SideProject;
 
 public class MenuConsole
 {
@@ -64,7 +66,9 @@ public class MenuConsole
         newAsset.AssetQuantity = int.Parse(Console.ReadLine());
 
         Console.Write("Digite o valor do ativo comprado: ");
-        newAsset.AssetValue = decimal.Parse(Console.ReadLine());
+        string inputValue = Console.ReadLine();
+        inputValue = inputValue.Replace(",", ".");
+        newAsset.AssetValue = decimal.Parse(inputValue, new CultureInfo("pt-BR"));
 
         newAsset.DateTime = DateTime.Now;
 
@@ -110,9 +114,9 @@ public class MenuConsole
         {
             decimal totalAllocated = asset.AssetQuantity * asset.AssetValue;
             Console.WriteLine($"Código do ativo: {asset.AssetCode}");
-            Console.WriteLine($"Preço por unidade: {asset.AssetValue}");
+            Console.WriteLine($"Preço por unidade: {asset.AssetValue.ToString("N2", new CultureInfo("pt-BR"))}");
             Console.WriteLine($"Quantidade: {asset.AssetQuantity}");
-            Console.WriteLine($"Valor total alocado: {totalAllocated}");
+            Console.WriteLine($"Valor total alocado: {totalAllocated.ToString("N2", new CultureInfo("pt-BR"))}");
             Console.WriteLine($"Data de compra: {asset.DateTime:dd/MM/yyyy HH:mm:ss}");
             Console.WriteLine("----------------------------");
         }
@@ -212,10 +216,10 @@ public class MenuConsole
         {
             decimal totalAlocated = asset.AssetQuantity * asset.AssetValue;
             totalPortfolioValue += totalAlocated;
-            Console.WriteLine($"Código do ativo: {asset.AssetCode} | Quantidade: {asset.AssetQuantity} | Valor de cada ativo: {asset.AssetValue} | Total investido: {totalAlocated}");
+            Console.WriteLine($"Código do ativo: {asset.AssetCode} | Quantidade: {asset.AssetQuantity} | Valor de cada ativo: {asset.AssetValue.ToString("N2", new CultureInfo("pt-BR"))} | Total investido: {totalAlocated.ToString("N2", new CultureInfo("pt-BR"))}");
         }
         Console.WriteLine("----------------------------");
-        Console.WriteLine($"Valor total investido na carteira: {totalPortfolioValue}");
+        Console.WriteLine($"Valor total investido na carteira: {totalPortfolioValue.ToString("N2", new CultureInfo("pt-BR"))}");
         Console.WriteLine("Pressione qualquer tecla para retornar ao menu...");
         Console.ReadKey();
         Console.Clear();
