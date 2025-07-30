@@ -53,7 +53,7 @@ public class MenuConsole
                     break;
             }
         }
-        while (option != "4");
+        while (option != "5");
     }
     internal void BuyAssets()
     {
