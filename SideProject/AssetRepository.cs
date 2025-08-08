@@ -21,7 +21,7 @@ public class AssetRepository
 
     public Asset RemoveAssetByCode(string assetCode)
     {
-        var assetToRemove = _asset.FirstOrDefault(a => a.AssetCode == assetCode);
+        var assetToRemove = _asset.FirstOrDefault(a => a.Code == assetCode);
         if (assetToRemove != null)
         {
             _asset.Remove(assetToRemove);

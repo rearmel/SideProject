@@ -5,5 +5,5 @@ var asset = new Asset();
 var assetRepository = new AssetRepository();
 
 var menu = new MenuConsole(assetRepository);
-        MenuConsole.ShowMenuConsole();
-    
+menu.ShowMenuConsole();
+

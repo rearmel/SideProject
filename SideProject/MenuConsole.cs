@@ -11,9 +11,8 @@ public class MenuConsole
         _assetRepository = assetRepository;
     }
 
-    public static void ShowMenuConsole()
+    public void ShowMenuConsole()
     {
-        var assetRepository = new AssetRepository();
         string option;
 
         do
@@ -30,20 +29,16 @@ public class MenuConsole
             switch (option)
             {
                 case "1":
-                    var option1 = new MenuConsole(assetRepository);
-                    option1.BuyAssets();
+                    BuyAssets();
                     break;
                 case "2":
-                    var option2 = new MenuConsole(assetRepository);
-                    option2.AssetDetails();
+                    AssetDetails();
                     break;
                 case "3":
-                    var option3 = new MenuConsole(assetRepository);
-                    option3.SellAssets();
+                    SellAssets();
                     break;
                 case "4":
-                    var option4 = new MenuConsole(assetRepository);
-                    option4.ShowPortfolio();
+                    ShowPortfolio();
                     break;
                 case "5":
                     Console.WriteLine("Encerrando programa..");
@@ -57,20 +52,18 @@ public class MenuConsole
     }
     internal void BuyAssets()
     {
-        var newAsset = new Asset();
-
         Console.Write("Digite o nome do ativo que você está comprando: ");
-        newAsset.AssetCode = Console.ReadLine();
+        var code = Console.ReadLine()!;
 
         Console.Write("Digite a quantidade do ativo que você deseja: ");
-        newAsset.AssetQuantity = int.Parse(Console.ReadLine());
+        var quantity = int.Parse(Console.ReadLine()!);
 
         Console.Write("Digite o valor do ativo comprado: ");
-        string inputValue = Console.ReadLine();
+        string inputValue = Console.ReadLine()!;
         inputValue = inputValue.Replace(".", ",");
-        newAsset.AssetValue = decimal.Parse(inputValue, new CultureInfo("pt-BR"));
+        var value = decimal.Parse(inputValue, new CultureInfo("pt-BR"));
 
-        newAsset.DateTime = DateTime.Now;
+        var newAsset = new Asset(code, quantity, value);
 
         _assetRepository.AddAsset(newAsset);
 
@@ -98,7 +91,7 @@ public class MenuConsole
         }
     }
 
-    internal static string OptionBuyAsset()
+    internal string OptionBuyAsset()
     {
         Console.WriteLine("Deseja comprar mais algum ativo?");
         Console.WriteLine("1 - Sim");
@@ -112,12 +105,12 @@ public class MenuConsole
         Console.WriteLine("Extrato de ativos investidos:");
         foreach (var asset in getAssets)
         {
-            decimal totalAllocated = asset.AssetQuantity * asset.AssetValue;
-            Console.WriteLine($"Código do ativo: {asset.AssetCode}");
-            Console.WriteLine($"Preço por unidade: {asset.AssetValue.ToString("N2", new CultureInfo("pt-BR"))}");
-            Console.WriteLine($"Quantidade: {asset.AssetQuantity}");
+            decimal totalAllocated = asset.Quantity * asset.Value;
+            Console.WriteLine($"Código do ativo: {asset.Code}");
+            Console.WriteLine($"Preço por unidade: {asset.Value.ToString("N2", new CultureInfo("pt-BR"))}");
+            Console.WriteLine($"Quantidade: {asset.Quantity}");
             Console.WriteLine($"Valor total alocado: {totalAllocated.ToString("N2", new CultureInfo("pt-BR"))}");
-            Console.WriteLine($"Data de compra: {asset.DateTime:dd/MM/yyyy HH:mm:ss}");
+            Console.WriteLine($"Data de compra: {asset.CreatedAt:dd/MM/yyyy HH:mm:ss}");
             Console.WriteLine("----------------------------");
         }
         Console.WriteLine("Pressione qualquer tecla para retornar ao menu...");
@@ -133,7 +126,7 @@ public class MenuConsole
         Console.Write("Digite a quantidade de ativos que você deseja vender: ");
         int assetQuantity = int.Parse(Console.ReadLine());
 
-        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.AssetCode == assetCode);
+        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.Code == assetCode);
         if (asset == null)
         {
             Console.WriteLine("Ativo não encontrado na carteira.");
@@ -186,9 +179,9 @@ public class MenuConsole
 
     public bool IsPossibleSellAsset(string assetCode, int assetQuantity)
     {
-        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.AssetCode == assetCode);
+        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.Code == assetCode);
 
-        if (asset.AssetQuantity < assetQuantity)
+        if (asset.Quantity < assetQuantity)
         {
             return false;
         }
@@ -197,8 +190,8 @@ public class MenuConsole
 
     public void DecreaseAssetQuantity(string assetCode, int assetQuantity)
     {
-        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.AssetCode == assetCode);
-        asset.AssetQuantity -= assetQuantity;
+        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.Code == assetCode);
+        asset.Decrease(assetQuantity);
     }
 
     public void ShowPortfolio() 
@@ -214,9 +207,9 @@ public class MenuConsole
         Console.WriteLine("Extrato consolidado de ativos investidos:");
         foreach (var asset in getAssets)
         {
-            decimal totalAlocated = asset.AssetQuantity * asset.AssetValue;
+            decimal totalAlocated = asset.Quantity * asset.Value;
             totalPortfolioValue += totalAlocated;
-            Console.WriteLine($"Código do ativo: {asset.AssetCode} | Quantidade: {asset.AssetQuantity} | Valor de cada ativo: {asset.AssetValue.ToString("N2", new CultureInfo("pt-BR"))} | Total investido: {totalAlocated.ToString("N2", new CultureInfo("pt-BR"))}");
+            Console.WriteLine($"Código do ativo: {asset.Code} | Quantidade: {asset.Quantity} | Valor de cada ativo: {asset.Value.ToString("N2", new CultureInfo("pt-BR"))} | Total investido: {totalAlocated.ToString("N2", new CultureInfo("pt-BR"))}");
         }
         Console.WriteLine("----------------------------");
         Console.WriteLine($"Valor total investido na carteira: {totalPortfolioValue.ToString("N2", new CultureInfo("pt-BR"))}");
