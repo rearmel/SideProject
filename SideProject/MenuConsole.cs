@@ -65,7 +65,7 @@ public class MenuConsole
         var value = decimal.Parse(inputValue, new CultureInfo("pt-BR"));
 
         var service = new Service(_assetRepository);
-        var result = service.IsPossibleBuyAsset(code, quantity, value);
+        var result = service.BuyAsset(code, quantity, value);
 
         Console.WriteLine(result.Message);
         Thread.Sleep(1000);

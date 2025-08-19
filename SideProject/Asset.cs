@@ -21,12 +21,17 @@ public class Asset
     public void Decrease(int quantity)
     {
         if (quantity > Quantity)
-            throw new InvalidOperationException("Quantidade insuficiente para venda.");
+            throw new AssetException("Quantidade insuficiente para venda.");
 
 
         if (quantity < 0)
-            throw new ArgumentException("A quantidade não pode ser negativa.");
+            throw new AssetException("A quantidade não pode ser negativa.");
 
         Quantity -= quantity;
+    }
+
+    public void Increase(int quantity)
+    {
+        Quantity += quantity;
     }
 }

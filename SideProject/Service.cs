@@ -8,21 +8,32 @@ public class Service
         _assetRepository = assetRepository;
     }
 
-    public Result IsPossibleBuyAsset(string code, int quantity, decimal value)
+    public Result BuyAsset(string code, int quantity, decimal value)
     {
         if (string.IsNullOrWhiteSpace(code))
-            return Result.Failure("Código do ativo inválido.");
+            return Result.Failure("Código do ativo inválido!");
 
         if (quantity <= 0)
-            return Result.Failure("Quantidade deve ser maior que zero.");
+            return Result.Failure("Quantidade deve ser maior que zero!");
 
         if (value <= 0)
-            return Result.Failure("Valor deve ser maior que zero.");
+            return Result.Failure("Valor deve ser maior que zero!");
 
-        var newAsset = new Asset(code, quantity, value);
-        _assetRepository.AddAsset(newAsset);
+        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.Code == code);
 
-        return Result.Success("Ativo adicionado com sucesso.");
+        if (asset != null)
+        {
+            asset.Increase(quantity);
+            return Result.Success("Ativo já existente na carteira, quantidade atualizada com sucesso!");
+        }
+        else
+        {
+            var newAsset = new Asset(code, quantity, value);
+            _assetRepository.AddAsset(newAsset);
+
+        }
+
+        return Result.Success("Ativo adicionado com sucesso!");
     }
 
     public Result SellAsset(string code, int quantity)
@@ -31,14 +42,20 @@ public class Service
         
         if (asset == null)
         {
-            return Result.Failure("Ativo não encontrado na carteira.");
+            return Result.Failure("Ativo não encontrado na carteira!");
         }
 
         if(asset.Quantity <= quantity)
         {
-            return Result.Failure("Quantidade para venda excede a quantidade disponível na carteira.");
+            return Result.Failure("Quantidade para venda excede a quantidade disponível na carteira!");
         }
         asset.Decrease(quantity);
-        return Result.Success("Ativo vendido com sucesso.");
+
+        if(asset.Quantity == 0)
+        {
+            _assetRepository.RemoveAssetByCode(code);
+        }
+
+        return Result.Success("Ativo vendido com sucesso!");
     }
 }

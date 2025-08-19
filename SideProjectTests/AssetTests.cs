@@ -43,7 +43,7 @@ public class AssetTests
         var asset = new Asset("AAA", 5, 150.0m);
 
         // Act & Assert
-        var ex = Assert.Throws<InvalidOperationException>(() => asset.Decrease(10));
+        var ex = Assert.Throws<AssetException>(() => asset.Decrease(10));
         Assert.Equal("Quantidade insuficiente para venda.", ex.Message);
     }
 
@@ -54,7 +54,7 @@ public class AssetTests
         var asset = new Asset("AAA", 8, 80.0m);
 
         // Act & Assert
-        var ex = Assert.Throws<ArgumentException>(() => asset.Decrease(-2));
+        var ex = Assert.Throws<AssetException>(() => asset.Decrease(-2));
         Assert.Equal("A quantidade não pode ser negativa.", ex.Message);
     }
 }
