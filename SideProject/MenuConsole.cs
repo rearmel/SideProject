@@ -63,10 +63,11 @@ public class MenuConsole
         inputValue = inputValue.Replace(".", ",");
         var value = decimal.Parse(inputValue, new CultureInfo("pt-BR"));
 
-        var newAsset = new Asset(code, quantity, value);
+        var service = new Service(_assetRepository);
+        var result = service.IsPossibleBuyAsset(code, quantity, value);
 
-        _assetRepository.AddAsset(newAsset);
-
+        Console.WriteLine(result.Message);
+        Thread.Sleep(2000);
         Console.Clear();
 
         string response = OptionBuyAsset();
@@ -126,25 +127,11 @@ public class MenuConsole
         Console.Write("Digite a quantidade de ativos que você deseja vender: ");
         int assetQuantity = int.Parse(Console.ReadLine());
 
-        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.Code == assetCode);
-        if (asset == null)
-        {
-            Console.WriteLine("Ativo não encontrado na carteira.");
-            Thread.Sleep(3000);
-            return;
-        }
-
-        if (IsPossibleSellAsset(assetCode, assetQuantity))
-        {
-            DecreaseAssetQuantity(assetCode, assetQuantity);
-            Console.WriteLine("Venda realizada com sucesso!");
-        }
-        else
-        {
-            Console.WriteLine("Quantidade para venda excede a quantidade disponível!");
-        }
-
-        Thread.Sleep(3000);
+        var service = new Service(_assetRepository);
+        var result = service.SellAsset(assetCode, assetQuantity);
+        
+        Console.WriteLine(result.Message);
+        Thread.Sleep(2000);
         Console.Clear();
 
         string response = OptionSellAsset();
