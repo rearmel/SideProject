@@ -12,7 +12,7 @@ public class Result
 
     public string Message { get; set; }
 
-    public static Result Success(string message = "Operação realizada com sucesso.")
+    public static Result Success(string message = "Operação realizada com sucesso!")
     {
         return new Result(true, message);
     }

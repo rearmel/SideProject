@@ -50,6 +50,7 @@ public class MenuConsole
         }
         while (option != "5");
     }
+
     internal void BuyAssets()
     {
         Console.Write("Digite o nome do ativo que você está comprando: ");
@@ -67,7 +68,7 @@ public class MenuConsole
         var result = service.IsPossibleBuyAsset(code, quantity, value);
 
         Console.WriteLine(result.Message);
-        Thread.Sleep(2000);
+        Thread.Sleep(1000);
         Console.Clear();
 
         string response = OptionBuyAsset();
@@ -162,23 +163,6 @@ public class MenuConsole
         Console.WriteLine("1 - Sim");
         Console.WriteLine("2 - Não");
         return Console.ReadLine();
-    }
-
-    public bool IsPossibleSellAsset(string assetCode, int assetQuantity)
-    {
-        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.Code == assetCode);
-
-        if (asset.Quantity < assetQuantity)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    public void DecreaseAssetQuantity(string assetCode, int assetQuantity)
-    {
-        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.Code == assetCode);
-        asset.Decrease(assetQuantity);
     }
 
     public void ShowPortfolio() 
