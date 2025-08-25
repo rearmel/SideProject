@@ -1,5 +1,4 @@
-﻿using SideProject.Helper;
-using SideProject.Repositories;
+﻿using SideProject.Repositories;
 using SideProject.Service;
 using System.Globalization;
 
@@ -59,7 +58,7 @@ public class MenuConsole
         Console.Write("Digite o nome do ativo que você está comprando: ");
         var code = Console.ReadLine()!;
 
-        if (!AssetHelper.IsValidCode(code))
+        if (!AssetService.IsValidCode(code))
         {
             Console.WriteLine("Código do ativo deve conter apenas letras e números!");
             Thread.Sleep(1000);
@@ -118,7 +117,7 @@ public class MenuConsole
         Console.WriteLine("Extrato de ativos investidos:");
         foreach (var asset in getAssets)
         {
-            decimal totalAllocated = asset.Quantity * asset.Value;//logica de negocio da classe asset.
+            decimal totalAllocated = asset.Quantity * asset.Value;
             Console.WriteLine($"Código do ativo: {asset.Code}");
             Console.WriteLine($"Preço por unidade: {asset.Value.ToString("N2", new CultureInfo("pt-BR"))}");
             Console.WriteLine($"Quantidade: {asset.Quantity}");
@@ -189,7 +188,7 @@ public class MenuConsole
         Console.WriteLine("Extrato consolidado de ativos investidos:");
         foreach (var asset in getAssets)
         {
-            decimal totalAlocated = asset.Quantity * asset.Value;//logica de negocio da classe asset. repetição de código
+            decimal totalAlocated = asset.Quantity * asset.Value;
             totalPortfolioValue += totalAlocated;
             Console.WriteLine($"Código do ativo: {asset.Code} | Quantidade: {asset.Quantity} | Valor de cada ativo: {asset.Value.ToString("N2", new CultureInfo("pt-BR"))} | Total investido: {totalAlocated.ToString("N2", new CultureInfo("pt-BR"))}");
         }

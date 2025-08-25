@@ -135,9 +135,9 @@ public class ServiceTests
     {
         // Arrange  
         var asset = new Asset("ABC", 5, 100);
-        
-        _assetRepositoryMock.Setup(r => r.GetAssets())
-        .Returns(new List<Asset> { asset });
+
+        _assetRepositoryMock.Setup(r => r.GetAssetByCode("ABC"))
+        .Returns(asset);
 
         // Act  
         var result = _service.SellAsset("ABC", 10);
