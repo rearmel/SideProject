@@ -1,6 +1,8 @@
-﻿namespace SideProject;
+﻿using SideProject.Repositories.Interface;
 
-public class AssetRepository
+namespace SideProject.Repositories;
+
+public class AssetRepository : IAssetRepository
 {
     private readonly List<Asset> _asset;
 
@@ -19,6 +21,11 @@ public class AssetRepository
         return _asset;
     }
 
+    public Asset? GetAssetByCode(string assetCode)
+    {
+        return _asset.FirstOrDefault(a => a.Code == assetCode);
+    }
+
     public Asset RemoveAssetByCode(string assetCode)
     {
         var assetToRemove = _asset.FirstOrDefault(a => a.Code == assetCode);
@@ -30,9 +37,10 @@ public class AssetRepository
         else
         {
             Console.WriteLine("Ativo não encontrado na carteira.");
-            throw new Exception("Ativo não encontrado na carteira.");
+            throw new AssetException("Ativo não encontrado na carteira.");
         }
     }
+    //salva
 }
 
 

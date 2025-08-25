@@ -1,17 +1,21 @@
-﻿namespace SideProject;
+﻿using SideProject.Repositories;
+using SideProject.Repositories.Interface;
+using System.Text.RegularExpressions;
 
-public class Service
+namespace SideProject.Service;
+
+public class AssetService
 {
-    private readonly AssetRepository _assetRepository;
-    public Service(AssetRepository assetRepository)
+    private readonly IAssetRepository _assetRepository;
+    public AssetService(IAssetRepository assetRepository)
     {
         _assetRepository = assetRepository;
     }
 
     public Result BuyAsset(string code, int quantity, decimal value)
     {
-        if (string.IsNullOrWhiteSpace(code))
-            return Result.Failure("Código do ativo inválido!");
+        if (!IsValidCode(code))
+            return Result.Failure("Código do ativo deve conter apenas letras e números!");
 
         if (quantity <= 0)
             return Result.Failure("Quantidade deve ser maior que zero!");
@@ -30,7 +34,6 @@ public class Service
         {
             var newAsset = new Asset(code, quantity, value);
             _assetRepository.AddAsset(newAsset);
-
         }
 
         return Result.Success("Ativo adicionado com sucesso!");
@@ -38,24 +41,28 @@ public class Service
 
     public Result SellAsset(string code, int quantity)
     {
-        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.Code == code);
-        
+        var asset = _assetRepository.GetAssetByCode(code);
+
         if (asset == null)
         {
             return Result.Failure("Ativo não encontrado na carteira!");
         }
 
-        if(asset.Quantity <= quantity)
+        if (asset.Quantity <= quantity)
         {
             return Result.Failure("Quantidade para venda excede a quantidade disponível na carteira!");
         }
         asset.Decrease(quantity);
 
-        if(asset.Quantity == 0)
+        if (asset.Quantity == 0)
         {
             _assetRepository.RemoveAssetByCode(code);
         }
 
         return Result.Success("Ativo vendido com sucesso!");
+    }
+    public static bool IsValidCode(string code)
+    {
+        return !string.IsNullOrWhiteSpace(code) && Regex.IsMatch(code, @"^[a-zA-Z0-9]+$");
     }
 }

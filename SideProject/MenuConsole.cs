@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿using SideProject.Helper;
+using SideProject.Repositories;
+using SideProject.Service;
+using System.Globalization;
 
 namespace SideProject;
 
@@ -56,6 +59,14 @@ public class MenuConsole
         Console.Write("Digite o nome do ativo que você está comprando: ");
         var code = Console.ReadLine()!;
 
+        if (!AssetHelper.IsValidCode(code))
+        {
+            Console.WriteLine("Código do ativo deve conter apenas letras e números!");
+            Thread.Sleep(1000);
+            Console.Clear();
+            return;
+        }
+
         Console.Write("Digite a quantidade do ativo que você deseja: ");
         var quantity = int.Parse(Console.ReadLine()!);
 
@@ -64,7 +75,7 @@ public class MenuConsole
         inputValue = inputValue.Replace(".", ",");
         var value = decimal.Parse(inputValue, new CultureInfo("pt-BR"));
 
-        var service = new Service(_assetRepository);
+        var service = new AssetService(_assetRepository);
         var result = service.BuyAsset(code, quantity, value);
 
         Console.WriteLine(result.Message);
@@ -107,7 +118,7 @@ public class MenuConsole
         Console.WriteLine("Extrato de ativos investidos:");
         foreach (var asset in getAssets)
         {
-            decimal totalAllocated = asset.Quantity * asset.Value;
+            decimal totalAllocated = asset.Quantity * asset.Value;//logica de negocio da classe asset.
             Console.WriteLine($"Código do ativo: {asset.Code}");
             Console.WriteLine($"Preço por unidade: {asset.Value.ToString("N2", new CultureInfo("pt-BR"))}");
             Console.WriteLine($"Quantidade: {asset.Quantity}");
@@ -128,7 +139,7 @@ public class MenuConsole
         Console.Write("Digite a quantidade de ativos que você deseja vender: ");
         int assetQuantity = int.Parse(Console.ReadLine());
 
-        var service = new Service(_assetRepository);
+        var service = new AssetService(_assetRepository);
         var result = service.SellAsset(assetCode, assetQuantity);
         
         Console.WriteLine(result.Message);
@@ -178,7 +189,7 @@ public class MenuConsole
         Console.WriteLine("Extrato consolidado de ativos investidos:");
         foreach (var asset in getAssets)
         {
-            decimal totalAlocated = asset.Quantity * asset.Value;
+            decimal totalAlocated = asset.Quantity * asset.Value;//logica de negocio da classe asset. repetição de código
             totalPortfolioValue += totalAlocated;
             Console.WriteLine($"Código do ativo: {asset.Code} | Quantidade: {asset.Quantity} | Valor de cada ativo: {asset.Value.ToString("N2", new CultureInfo("pt-BR"))} | Total investido: {totalAlocated.ToString("N2", new CultureInfo("pt-BR"))}");
         }

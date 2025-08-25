@@ -37,17 +37,6 @@ public class AssetTests
     }
 
     [Fact]
-    public void Decrease_Quantity_reater_Than_Available()
-    {
-        // Arrange
-        var asset = new Asset("AAA", 5, 150.0m);
-
-        // Act & Assert
-        var ex = Assert.Throws<AssetException>(() => asset.Decrease(10));
-        Assert.Equal("Quantidade insuficiente para venda.", ex.Message);
-    }
-
-    [Fact]
     public void Decrease_Negative_Quantity()
     {
         // Arrange

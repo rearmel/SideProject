@@ -1,4 +1,5 @@
 ﻿using SideProject;
+using SideProject.Repositories;
 
 var assetRepository = new AssetRepository();
 
