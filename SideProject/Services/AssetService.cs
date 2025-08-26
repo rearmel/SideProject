@@ -1,4 +1,5 @@
-﻿using SideProject.Repositories;
+﻿using SideProject.Helpers;
+using SideProject.Repositories;
 using SideProject.Repositories.Interface;
 using System.Text.RegularExpressions;
 
@@ -14,7 +15,7 @@ public class AssetService
 
     public Result BuyAsset(string code, int quantity, decimal value)
     {
-        if (!IsValidCode(code))
+        if (!AssetHelper.IsValidCode(code))
             return Result.Failure("Código do ativo deve conter apenas letras e números!");
 
         if (quantity <= 0)
@@ -48,21 +49,18 @@ public class AssetService
             return Result.Failure("Ativo não encontrado na carteira!");
         }
 
-        if (asset.Quantity <= quantity)
+        if (asset.Quantity < quantity)
         {
             return Result.Failure("Quantidade para venda excede a quantidade disponível na carteira!");
         }
+
         asset.Decrease(quantity);
 
-        if (asset.Quantity == 0)
+        if (asset.IsQuantityZero())
         {
             _assetRepository.RemoveAssetByCode(code);
         }
 
         return Result.Success("Ativo vendido com sucesso!");
-    }
-    public static bool IsValidCode(string code)
-    {
-        return !string.IsNullOrWhiteSpace(code) && Regex.IsMatch(code, @"^[a-zA-Z0-9]+$");
     }
 }

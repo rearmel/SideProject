@@ -34,4 +34,14 @@ public class Asset
     {
         Quantity += quantity;
     }
+
+    public decimal CalculateTotalAllocated()
+    {
+        return Quantity * Value;
+    }
+
+    public bool IsQuantityZero()
+    {
+        return Quantity == 0;
+    }
 }

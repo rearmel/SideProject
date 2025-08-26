@@ -40,7 +40,6 @@ public class AssetRepository : IAssetRepository
             throw new AssetException("Ativo não encontrado na carteira.");
         }
     }
-    //salva
 }
 
 
