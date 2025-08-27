@@ -1,7 +1,5 @@
 ﻿using SideProject.Helpers;
-using SideProject.Repositories;
 using SideProject.Repositories.Interface;
-using System.Text.RegularExpressions;
 
 namespace SideProject.Service;
 
@@ -24,7 +22,7 @@ public class AssetService
         if (value <= 0)
             return Result.Failure("Valor deve ser maior que zero!");
 
-        var asset = _assetRepository.GetAssets().FirstOrDefault(a => a.Code == code);
+        var asset = _assetRepository.GetAssetByCode(code);
 
         if (asset != null)
         {

@@ -89,8 +89,7 @@ public class ServiceTests
         .WithValue(100)
         .Build();
 
-        var assets = new List<Asset> { asset };
-        _assetRepositoryMock.Setup(r => r.GetAssets()).Returns(assets);
+        _assetRepositoryMock.Setup(r => r.GetAssetByCode("ABC")).Returns(asset);
 
         // Act
         var result = _service.BuyAsset("ABC", 5, 100);
